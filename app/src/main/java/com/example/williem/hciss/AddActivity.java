@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,12 +59,6 @@ public class AddActivity extends AppCompatActivity {
         addexpense_notes = (EditText) findViewById(R.id.addexpense_notes);
         fab2 = (FloatingActionButton) findViewById(R.id.fabs2);
 
-        List<String> categories = new ArrayList<String>();
-
-        categories.add("Select one");
-        categories.add("Expense");
-        categories.add("Income");
-
 
 
 
@@ -78,7 +73,7 @@ public class AddActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String Text = parent.getSelectedItem().toString();
                 spinnertext=Text;
-                if(Text.equals("Select one")) {
+              /*  if(Text.equals("Select one")) {
                     Toast.makeText(AddActivity.this, "expense", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -90,7 +85,7 @@ public class AddActivity extends AppCompatActivity {
                     Toast.makeText(AddActivity.this, "Income", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                */
             }
 
             @Override
@@ -124,13 +119,17 @@ public class AddActivity extends AppCompatActivity {
                 String newTitle= titleexpense_expense.getText().toString();
                 String newValue = addexpense_expense.getText().toString();
 
+
                 Integer intValue = Integer.parseInt(newValue);
 
                 String newDate = addexpense_date.getText().toString();
                 String newNotes = addexpense_notes.getText().toString();
 
+
+
             if(spinnertext.equals("Select one"))
             {
+                Toast.makeText(AddActivity.this, "Value, Type, dan Date harus diisi", Toast.LENGTH_SHORT).show();
                 if(newValue.equals("") || newDate.equals(""))
                 {
                     Toast.makeText(AddActivity.this, "Value, Type, dan Date harus diisi", Toast.LENGTH_SHORT).show();
@@ -138,12 +137,23 @@ public class AddActivity extends AppCompatActivity {
 
             }
 
+                if(spinnertext.equals("Select one"))
+                {
+                    Toast.makeText(AddActivity.this, "Value, Type, dan Date harus diisi", Toast.LENGTH_SHORT).show();
+                    if(newValue.equals("") || newDate.equals(""))
+                    {
+                        Toast.makeText(AddActivity.this, "Value, Type, dan Date harus diisi", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
 
 
 
-                else {
 
-                    dbHelper.addData(newTitle ,intValue,newDate , newNotes);
+                else if(spinnertext.equals("Income"))
+                {
+
+                    dbHelper.addData(newTitle ,intValue,0,newDate , newNotes);
 
                     Toast.makeText(getApplicationContext(), "Berhasil"+newValue+newDate+newNotes, Toast.LENGTH_LONG).show();
 
@@ -157,6 +167,58 @@ public class AddActivity extends AppCompatActivity {
 
                 }
 
+                else if(spinnertext.equals("Expense"))
+                {
+                    intValue=intValue*-1;
+                    dbHelper.addData(newTitle ,intValue,1,newDate , newNotes);
+
+                    Toast.makeText(getApplicationContext(), "Berhasil"+newValue+newDate+newNotes, Toast.LENGTH_LONG).show();
+
+
+
+
+
+                    Intent i = new Intent(AddActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+
+                }
+
+
+
+                else if(spinnertext.equals("Income"))
+                {
+
+                    dbHelper.addData(newTitle ,intValue,0,newDate , newNotes);
+
+                    Toast.makeText(getApplicationContext(), "Berhasil"+newValue+newDate+newNotes, Toast.LENGTH_LONG).show();
+
+
+
+
+
+                    Intent i = new Intent(AddActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+
+                }
+
+            else if(spinnertext.equals("Expense"))
+            {
+                intValue=intValue*-1;
+                dbHelper.addData(newTitle ,intValue,1,newDate , newNotes);
+
+                Toast.makeText(getApplicationContext(), "Berhasil"+newValue+newDate+newNotes, Toast.LENGTH_LONG).show();
+
+
+
+
+
+                Intent i = new Intent(AddActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+
+            }
 
 
 

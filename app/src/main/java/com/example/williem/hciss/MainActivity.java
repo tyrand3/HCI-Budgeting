@@ -1,7 +1,10 @@
 package com.example.williem.hciss;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -33,6 +36,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
@@ -51,10 +55,13 @@ public class MainActivity extends AppCompatActivity
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(getApplicationContext(),AddActivity.class);
                 startActivity(i);
+
+
             }
         });
 
@@ -95,6 +102,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(this, HelpActivity.class);
+            startActivity(i);
             return true;
         }
 
@@ -126,7 +135,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new CalendarFragment();
                 break;
             case R.id.nav_graph:
-                fragment = new GraphFragments();
+                fragment = new HistoryFragment();
 
                 break;
         }

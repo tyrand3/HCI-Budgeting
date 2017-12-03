@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,13 +34,14 @@ public class EditActivity extends AppCompatActivity {
     EditText addexpense_expense,addexpense_date,addexpense_notes,titleexpense_expense;
     Spinner tipe;
     Calendar myCalendar = Calendar.getInstance();
-    FloatingActionButton button;
-
+    FloatingActionButton fab2;
+    String spinnertext;
 
     protected Cursor cursor;
     DatabaseHelper dbHelper;
+String newTitle,newValue,newDate,newType,newNote;
+String newString;
 
-    Integer values;
     String notes,date;
     double value;
     boolean editingNote;
@@ -57,33 +58,135 @@ public class EditActivity extends AppCompatActivity {
         addexpense_expense = (EditText) findViewById(R.id.expense_edit_value);
         addexpense_date = (EditText) findViewById(R.id.expense_edit_date);
         addexpense_notes = (EditText) findViewById(R.id.expense_edit_note);
-        button = (FloatingActionButton) findViewById(R.id.fabs3);
-
-        List<String> categories = new ArrayList<String>();
+        fab2 = (FloatingActionButton) findViewById(R.id.fabs3);
 
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+
+        Bundle extras = getIntent().getExtras();
+
+        newTitle = extras.getString("title");
+        newString = extras.getString("id");
+        newValue = extras.getString("value");
+        newType = extras.getString("type");
+        newDate = extras.getString("date");
+        newNote = extras.getString("note");
+
+
+        titleexpense_expense.setText(newTitle);
+        addexpense_expense.setText(newValue);
+
+        addexpense_notes.setText(newNote);
+        addexpense_date.setText(newDate);
+
+
+
+        spinnerinit();
+
+
+        tipe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                String newString;
-
-                Bundle extras = getIntent().getExtras();
-
-                newString = extras.getString("id");
-
-                if (addexpense_expense.getText().toString().equals("") || addexpense_notes.getText().toString().equals("")) {
-                    Toast.makeText(EditActivity.this, "Value dan Date harus diisi", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    values = Integer.parseInt(addexpense_expense.getText().toString());
-
-                    dbHelper.editExpense(titleexpense_expense.getText().toString(), values, addexpense_notes.getText().toString(), newString);
-                    finish();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String Text = parent.getSelectedItem().toString();
+                spinnertext=Text;
+              /*  if(Text.equals("Select one")) {
+                    Toast.makeText(AddActivity.this, "expense", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                else if(Text.equals("Income")){
+                    Toast.makeText(AddActivity.this, "Income", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(Text.equals("Expense")){
+                    Toast.makeText(AddActivity.this, "Income", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                */
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
+
+
+
+
+        addexpense_date.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(EditActivity.this, dates, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+
+                Integer values= Integer.parseInt(addexpense_expense.getText().toString());
+
+                if(spinnertext.equals("Select one"))
+                {
+                    Toast.makeText(EditActivity.this, "Value, Type, dan Date harus diisi", Toast.LENGTH_SHORT).show();
+                    if(titleexpense_expense.getText().toString().equals("") || addexpense_date.getText().toString().equals(""))
+                    {
+                        Toast.makeText(EditActivity.this, "Value, Type, dan Date harus diisi", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+                else if(spinnertext.equals("Income"))
+                {
+
+                    dbHelper.editExpense(titleexpense_expense.getText().toString(), values, 0, addexpense_notes.getText().toString(), newString);
+
+                    Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_LONG).show();
+
+
+
+                    Intent i = new Intent(EditActivity.this, MainActivity.class);
+
+                    startActivity(i);
+                    finish();
+
+                }
+
+                else if(spinnertext.equals("Expense"))
+                {
+
+                    dbHelper.editExpense(titleexpense_expense.getText().toString(), values, 1, addexpense_notes.getText().toString(), newString);
+
+                    Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_LONG).show();
+
+
+
+                    Intent i = new Intent(EditActivity.this, MainActivity.class);
+
+                    startActivity(i);
+                    finish();
+
+                }
+
+
+
+
+
+
+
+
+            }
+
+        });
 
 
 
@@ -104,10 +207,23 @@ public class EditActivity extends AppCompatActivity {
     };
 
     private void updateLabel() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "yyyy/dd/mm"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         addexpense_date.setText(sdf.format(myCalendar.getTime()));
+    }
+
+
+    public void spinnerinit()
+    {
+        tipe = (Spinner) findViewById(R.id.spinneredit);
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.tipe_expenses, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        tipe.setAdapter(adapter);
     }
 
 

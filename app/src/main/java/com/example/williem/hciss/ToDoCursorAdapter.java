@@ -2,6 +2,7 @@ package com.example.williem.hciss;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +36,38 @@ class TodoCursorAdapter extends CursorAdapter {
         TextView tvPriority = (TextView) view.findViewById(R.id.tvPriority);
         TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
         TextView tvNote = (TextView) view.findViewById(R.id.tvNotes);
+        TextView tvType = (TextView) view.findViewById(R.id.tvType);
         // Extract properties from cursor
         String body = cursor.getString(cursor.getColumnIndexOrThrow("D_TITLE"));
         priority = cursor.getInt(cursor.getColumnIndexOrThrow("D_VALUE"));
         String date = cursor.getString(cursor.getColumnIndexOrThrow("D_DATE"));
         String note = cursor.getString(cursor.getColumnIndexOrThrow("D_NOTE"));
-        // Populate fields with extracted properties
-        tvBody.setText(body);
-        tvPriority.setText("Rp."+String.valueOf(priority)+",-");
-        tvDate.setText(date);
-        tvNote.setText(note);
+
+        Integer type = cursor.getInt(cursor.getColumnIndexOrThrow("D_TYPE"));
+
+if (type==1)
+{
+    // Populate fields with extracted properties
+    tvBody.setText(body);
+    tvBody.setTextColor(Color.RED);
+    tvType.setText("Pengeluaran");
+    tvType.setTextColor(Color.RED);
+    tvPriority.setText("Rp."+String.valueOf(priority)+",-");
+    tvDate.setText(date);
+    tvNote.setText(note);
+}
+
+else {
+    // Populate fields with extracted properties
+    tvBody.setText(body);
+    tvBody.setTextColor(Color.GREEN);
+    tvType.setText("Pemasukan");
+    tvType.setTextColor(Color.GREEN);
+    tvPriority.setText("Rp."+String.valueOf(priority)+",-");
+    tvDate.setText(date);
+    tvNote.setText(note);
+}
+
+
     }
 }

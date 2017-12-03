@@ -30,10 +30,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_2 = "D_TITLE";
 
     public static final String COL_3 = "D_VALUE";
-    public static final String COL_4 = "D_DATE";
-    public static final String COL_5 = "D_NOTE";
+    public static final String COL_4 = "D_TYPE";
 
-    public static final String COL_6 = "D_IMAGE";
+    public static final String COL_5 = "D_DATE";
+    public static final String COL_6 = "D_NOTE";
+
+
 
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME,null,DATABASE_VERSION);
@@ -50,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String createTable = "CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + "D_TITLE TEXT NOT NULL, "
-                + "D_VALUE INTEGER NOT NULL, " + "D_DATE DATE NOT NULL, " + "D_NOTE TEXT NOT NULL);";
+                + "D_VALUE INTEGER NOT NULL, " + "D_TYPE INTEGER NOT NULL, " + "D_DATE DATE NOT NULL, " + "D_NOTE TEXT NOT NULL);";
 
         db.execSQL(createTable);
     }
@@ -65,13 +67,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean addData (String title, int value, String date, String note){
+    public boolean addData (String title, int value, int type ,String date, String note){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_2, title);
         cv.put(COL_3, value);
-        cv.put(COL_4, date);
-        cv.put(COL_5, note);
+        cv.put(COL_4, type);
+
+        cv.put(COL_5, date);
+        cv.put(COL_6, note);
 
       ///  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
       //  String sCertDate = dateFormat.format(new Date());
@@ -97,6 +101,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return 0;
     }
 
+    public Integer sumByDate(String date)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(D_Value) FROM biodata WHERE D_Date='"+date+"'", null);
+        if(cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        else return 0;
+    }
+
+
+    public Integer sumAll()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(D_Value) FROM biodata", null);
+        if(cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        else return 0;
+    }
+
+
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String sCertDate = dateFormat.format(new Date());
 
@@ -114,9 +142,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public boolean editExpense(String title, int value, String note, String id) {
+    public boolean editExpense(String title, int value,int type, String note, String id) {
 
-        String update = "UPDATE "+ TABLE_NAME +" SET D_TITLE='"+title+"', D_VALUE='"+value+"', D_NOTE='"+note+"' WHERE _id=" + id +";";
+        String update = "UPDATE "+ TABLE_NAME +" SET D_TITLE='"+title+"', D_VALUE='"+value+"', D_TYPE='"+type+"', D_NOTE='"+note+"' WHERE _id=" + id +";";
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(update);
         return true;

@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class ExpenseFragment extends Fragment {
     protected Cursor cursor;
     DatabaseHelper dbcenter;
     TextView sumtv;
+  //  TextView balance;
     double sumstring = 0;
     public ExpenseFragment() {
         // Required empty public constructor
@@ -99,7 +101,7 @@ public class ExpenseFragment extends Fragment {
 
         final ListView listview = (ListView) view.findViewById(R.id.listviews);
         sumtv= (TextView)view.findViewById(R.id.tvs);
-
+//balance=(TextView)view.findViewById(R.id.balance);
 
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,12 +111,18 @@ public class ExpenseFragment extends Fragment {
 
                 String s = listview.getItemAtPosition(myItemInt).toString();
                 SQLiteCursor cursor = (SQLiteCursor) listview.getItemAtPosition(myItemInt);
+                SQLiteCursor cursor2 = (SQLiteCursor) listview.getItemAtPosition(myItemInt);
                 String selectedItem = cursor.getString(0);
 
                 System.out.println(selectedItem);
 
-                String strName = null;
-                i.putExtra("id", selectedItem);
+
+                i.putExtra("id", cursor.getString(0));
+                i.putExtra("title",cursor.getString(1));
+                i.putExtra("value",cursor.getString(2));
+                i.putExtra("type",cursor.getString(3));
+                i.putExtra("date",cursor.getString(4));
+                i.putExtra("note",cursor.getString(5));
                 startActivity(i);
 
             }
@@ -138,9 +146,10 @@ public class ExpenseFragment extends Fragment {
 
 
         int jum=dbcenter.sumAllToday();
+        int jumlah=dbcenter.sumAll();
         String numberAsStrings = Integer.toString(jum);
-        sumtv.setText("Pengeluaran Hari ini : "+numberAsStrings);
-
+        sumtv.setText("Today's Transaction : Rp."+numberAsStrings+",-");
+     //   balance.setText(jumlah);
 
 
     }

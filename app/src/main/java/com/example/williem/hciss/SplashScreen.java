@@ -1,8 +1,10 @@
 package com.example.williem.hciss;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -10,8 +12,14 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        Intent i = new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(i);
-        finish();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashScreen.this,       MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, 1000);
     }
 }

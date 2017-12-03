@@ -32,7 +32,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2017-12-31"
-        android:layout_marginLeft="230dp"
+        android:layout_marginLeft="200dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tvType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expense"
+        android:layout_marginLeft="200dp"
+        android:layout_below="@id/tvDate"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

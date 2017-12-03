@@ -34,6 +34,15 @@
         android:text="find"
 
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Transaksi : "
+        android:id="@+id/totaltransaksi"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
+
     <ListView
         android:id="@+id/lv_items"
         android:layout_width="wrap_content"

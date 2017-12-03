@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -35,7 +36,7 @@ public class CalendarFragment extends Fragment {
 
     protected Cursor cursor;
     DatabaseHelper dbcenter;
-
+    TextView total;
     EditText calendar;
     Button find;
     ListView list;
@@ -60,16 +61,17 @@ public class CalendarFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        total = (TextView)view.findViewById(R.id.totaltransaksi);
         list = (ListView) view.findViewById(R.id.lists);
         calendar = (EditText) view.findViewById(R.id.calendarfragment_date);
         find = (Button) view.findViewById(R.id.findtanggal);
 
-        find.setBackgroundColor(Color.YELLOW);
+        find.setBackgroundColor(Color.BLUE);
+        find.setTextColor(Color.WHITE);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
 //                String selectedFromList =(String) (listview.getItemAtPosition(myItemInt));
-                                            Intent i = new Intent(getActivity(), EditActivity.class);
+
 
                                             String s = list.getItemAtPosition(myItemInt).toString();
                                             SQLiteCursor cursor = (SQLiteCursor) list.getItemAtPosition(myItemInt);
@@ -78,6 +80,7 @@ public class CalendarFragment extends Fragment {
                                             System.out.println(selectedItem);
 
                                             String strName = null;
+                                            Intent i = new Intent(getActivity(), EditActivity.class);
                                             i.putExtra("id", selectedItem);
                                             startActivity(i);
                                         }
@@ -93,10 +96,15 @@ public class CalendarFragment extends Fragment {
 // Get access to the underlying writeable database
                 SQLiteDatabase db = handler.getWritableDatabase();
 // Query for items from the database and get a cursor back
+
+                int jum=dbcenter.sumByDate(calendar.getText().toString());
+                Integer intInstance = new Integer(jum);
+                String numberAsString = intInstance.toString();
+
                 Cursor todoCursor = handler.getListContents(calendar.getText().toString());
 
                 // Find ListView to populate
-
+                total.setText("Total Transaksi : Rp."+numberAsString+",-");
 // Setup cursor adapter using cursor from last step
                 TodoCursorAdapter todoAdapter = new TodoCursorAdapter(getActivity(), todoCursor);
 // Attach cursor adapter to the ListView
@@ -133,4 +141,6 @@ public class CalendarFragment extends Fragment {
         String date = sdf.format(Calendar.getInstance().getTime());
         calendar.setText(sdf.format(myCalendar.getTime()));
     }
+
+
 }
