@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">HCIss</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string-array name="tipe_expenses">
+        <item>Select one</item>
+        <item>Expense</item>
+        <item>Income</item>
+
+
+    </string-array>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
