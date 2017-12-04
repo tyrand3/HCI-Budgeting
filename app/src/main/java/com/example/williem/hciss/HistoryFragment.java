@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -24,9 +25,11 @@ public class HistoryFragment extends Fragment {
 
 
     String[] daftar;
-    ListView ListView01;
+    ListView listview;
     Menu menu;
     protected Cursor cursor;
+    Cursor todoCursor;
+    TodoCursorAdapter todoAdapter;
     DatabaseHelper dbcenter;
     TextView sumtv;
     //  TextView balance;
@@ -48,13 +51,28 @@ public class HistoryFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbcenter = new DatabaseHelper(getActivity());
 
-        final ListView listview = (ListView) view.findViewById(R.id.listviews);
+         listview = (ListView) view.findViewById(R.id.listviews);
         sumtv= (TextView)view.findViewById(R.id.tvs);
 //balance=(TextView)view.findViewById(R.id.balance);
+
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View views, int position, long id) {
+                SQLiteCursor cursor = (SQLiteCursor) listview.getItemAtPosition(position);
+                String selectedItem = cursor.getString(0);
+                DatabaseHelper handler = new DatabaseHelper(getActivity());
+                handler.deleteExpense(selectedItem);
+
+                refresh(view);
+                Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
 
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,12 +106,12 @@ public class HistoryFragment extends Fragment {
 // Get access to the underlying writeable database
         SQLiteDatabase db = handler.getWritableDatabase();
 // Query for items from the database and get a cursor back
-        Cursor todoCursor = handler.getAllData();
+       todoCursor = handler.getAllData();
 
         // Find ListView to populate
         ListView lvItems = (ListView) view.findViewById(R.id.listviews);
 // Setup cursor adapter using cursor from last step
-        TodoCursorAdapter todoAdapter = new TodoCursorAdapter(getActivity(), todoCursor);
+        todoAdapter = new TodoCursorAdapter(getActivity(), todoCursor);
 // Attach cursor adapter to the ListView
         lvItems.setAdapter(todoAdapter);
 
@@ -106,4 +124,24 @@ public class HistoryFragment extends Fragment {
 
 
     }
+
+
+    public void refresh(View view)
+    {
+        // TodoDatabaseHandler is a SQLiteOpenHelper class connecting to SQLite
+        DatabaseHelper handlerz = new DatabaseHelper(getActivity());
+// Get access to the underlying writeable database
+        SQLiteDatabase db = handlerz.getWritableDatabase();
+// Query for items from the database and get a cursor back
+        Cursor todoCursor = handlerz.getAllData();
+
+        // Find ListView to populate
+        listview = (ListView) view.findViewById(R.id.listviews);
+// Setup cursor adapter using cursor from last step
+        todoAdapter = new TodoCursorAdapter(getActivity(), todoCursor);
+// Attach cursor adapter to the ListView
+        listview.setAdapter(todoAdapter);
+
+    }
+
 }

@@ -1,10 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context="com.example.williem.hciss.CalendarFragment">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+>
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -12,28 +13,22 @@
         android:layout_marginLeft="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date : "
+        android:text="Calendar "
+        android:id="@+id/tvcalendar"
+        android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         />
 
-    <EditText
-        android:layout_marginTop="-8dp"
-        android:layout_width="match_parent"
-        android:hint="YYYY-MM-DD"
-        android:layout_height="wrap_content"
 
-        android:id="@+id/calendarfragment_date"
-        android:clickable="true"
 
-        />
 
-    <Button
+    <CalendarView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/findtanggal"
-        android:text="find"
+        android:id="@+id/calendar"
+        >
 
-        />
+    </CalendarView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,14 +38,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         />
 
-    <ListView
-        android:id="@+id/lv_items"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-
-    </ListView>
-
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
     <ListView
         android:id="@+id/lists"
         android:layout_width="wrap_content"
@@ -59,6 +49,7 @@
 
     </ListView>
 
-
+  </ScrollView>
 
 </LinearLayout>
+

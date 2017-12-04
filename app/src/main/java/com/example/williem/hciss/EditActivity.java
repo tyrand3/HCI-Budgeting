@@ -135,6 +135,7 @@ String newString;
 
                 Integer values= Integer.parseInt(addexpense_expense.getText().toString());
 
+
                 if(spinnertext.equals("Select one"))
                 {
                     Toast.makeText(EditActivity.this, "Value, Type, dan Date harus diisi", Toast.LENGTH_SHORT).show();
@@ -147,7 +148,10 @@ String newString;
 
                 else if(spinnertext.equals("Income"))
                 {
-
+                    if (values<0)
+                    {
+                        values=values*-1;
+                    }
                     dbHelper.editExpense(titleexpense_expense.getText().toString(), values, 0, addexpense_notes.getText().toString(), newString);
 
                     Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_LONG).show();

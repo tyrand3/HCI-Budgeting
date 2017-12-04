@@ -1,6 +1,7 @@
 package com.example.williem.hciss;
 
 
+import android.app.FragmentTransaction;
 import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -70,10 +71,9 @@ import org.w3c.dom.Text;
 public class ExpenseFragment extends Fragment {
 
 
-    String[] daftar;
-    ListView ListView01;
-    Menu menu;
-    protected Cursor cursor;
+
+    ListView lvItems;
+    TodoCursorAdapter todoAdapter;
     DatabaseHelper dbcenter;
     TextView sumtv;
   //  TextView balance;
@@ -95,13 +95,27 @@ public class ExpenseFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbcenter = new DatabaseHelper(getActivity());
 
         final ListView listview = (ListView) view.findViewById(R.id.listviews);
+
         sumtv= (TextView)view.findViewById(R.id.tvs);
 //balance=(TextView)view.findViewById(R.id.balance);
+
+
+   refresh(view);
+
+        int jum=dbcenter.sumAllToday();
+        int jumlah=dbcenter.sumAll();
+        String numberAsStrings = Integer.toString(jum);
+        sumtv.setText("Today's Transaction : Rp."+numberAsStrings+",-");
+        //   balance.setText(jumlah);
+
+
+
+
 
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -130,27 +144,47 @@ public class ExpenseFragment extends Fragment {
 
         });
 
-// TodoDatabaseHandler is a SQLiteOpenHelper class connecting to SQLite
-        DatabaseHelper handler = new DatabaseHelper(getActivity());
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View views, int position, long id) {
+                SQLiteCursor cursor = (SQLiteCursor) listview.getItemAtPosition(position);
+                String selectedItem = cursor.getString(0);
+                DatabaseHelper handler = new DatabaseHelper(getActivity());
+                handler.deleteExpense(selectedItem);
+
+                refresh(view);
+                Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
+
+
+    }
+
+    public void refresh(View view)
+    {
+        // TodoDatabaseHandler is a SQLiteOpenHelper class connecting to SQLite
+        DatabaseHelper handlerz = new DatabaseHelper(getActivity());
 // Get access to the underlying writeable database
-        SQLiteDatabase db = handler.getWritableDatabase();
+        SQLiteDatabase db = handlerz.getWritableDatabase();
 // Query for items from the database and get a cursor back
-        Cursor todoCursor = handler.getTodayListContents();
+        Cursor todoCursor = handlerz.getTodayListContents();
 
         // Find ListView to populate
-        ListView lvItems = (ListView) view.findViewById(R.id.listviews);
+        lvItems = (ListView) view.findViewById(R.id.listviews);
 // Setup cursor adapter using cursor from last step
-        TodoCursorAdapter todoAdapter = new TodoCursorAdapter(getActivity(), todoCursor);
+        todoAdapter = new TodoCursorAdapter(getActivity(), todoCursor);
 // Attach cursor adapter to the ListView
         lvItems.setAdapter(todoAdapter);
 
+    }
 
-        int jum=dbcenter.sumAllToday();
-        int jumlah=dbcenter.sumAll();
-        String numberAsStrings = Integer.toString(jum);
-        sumtv.setText("Today's Transaction : Rp."+numberAsStrings+",-");
-     //   balance.setText(jumlah);
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
     }
 }

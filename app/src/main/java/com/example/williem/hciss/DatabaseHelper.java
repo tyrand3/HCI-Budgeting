@@ -22,9 +22,9 @@ import static android.content.ContentValues.TAG;
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "biodatadiri.db";
+    private static final String DATABASE_NAME = "budgeting.db";
     private static final int DATABASE_VERSION = 2;
-    private static final String TABLE_NAME = "biodata";
+    private static final String TABLE_NAME = "expense";
 
     public static final String COL_1 = "_id";
     public static final String COL_2 = "D_TITLE";
@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT SUM(D_Value) FROM biodata WHERE D_Date='"+sCertDate+"'", null);
+                "SELECT SUM(D_Value) FROM "+TABLE_NAME+" WHERE D_Date='"+sCertDate+"'", null);
         if(cursor.moveToFirst()) {
             return cursor.getInt(0);
         }
@@ -105,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT SUM(D_Value) FROM biodata WHERE D_Date='"+date+"'", null);
+                "SELECT SUM(D_Value) FROM expense WHERE D_Date='"+date+"'", null);
         if(cursor.moveToFirst()) {
             return cursor.getInt(0);
         }
@@ -117,12 +117,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT SUM(D_Value) FROM biodata", null);
+                "SELECT * FROM expense", null);
         if(cursor.moveToFirst()) {
             return cursor.getInt(0);
         }
         else return 0;
     }
+
+
 
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -183,6 +185,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME +" WHERE D_Date='"+date+"'", null);
         return data;
     }
+
+    public boolean deleteExpense(String id) {
+
+        String update = "DELETE FROM "+ TABLE_NAME +" WHERE _id=" + id +";";
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(update);
+        return true;
+    }
+
+    public boolean deleteAllData() {
+
+        String update = "DELETE FROM "+ TABLE_NAME ;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(update);
+        return true;
+    }
+
 
 
 

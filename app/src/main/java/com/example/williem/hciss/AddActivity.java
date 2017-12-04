@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,7 +59,6 @@ public class AddActivity extends AppCompatActivity {
         addexpense_date = (EditText) findViewById(R.id.addexpense_date);
         addexpense_notes = (EditText) findViewById(R.id.addexpense_notes);
         fab2 = (FloatingActionButton) findViewById(R.id.fabs2);
-
 
 
 
