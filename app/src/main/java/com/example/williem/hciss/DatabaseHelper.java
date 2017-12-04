@@ -112,6 +112,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return 0;
     }
 
+    public Integer sumByMonth(String date, String year)
+    {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(
+
+                "SELECT SUM(D_Value) FROM expense WHERE strftime('%m', D_DATE) = '"+date+"' AND strftime('%Y', D_DATE) = '"+year+"'", null);
+        if(cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        else return 0;
+    }
+
 
     public Integer sumAll()
     {
@@ -143,6 +156,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
         return res;
     }
+
+
 
     public boolean editExpense(String title, int value,int type, String note, String id) {
 

@@ -2,11 +2,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBG"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.williem.hciss.GraphFragments">
-
-    <com.jjoe64.graphview.GraphView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:id="@+id/graph" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transaction Graphical Monthly View"
+            android:id="@+id/graphicstext"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            />
 
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graph" />
+
+
+
+
+
+
+    </LinearLayout>
 </FrameLayout>

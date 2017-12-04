@@ -4,17 +4,23 @@ package com.example.williem.hciss;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -23,80 +29,95 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class GraphFragments extends Fragment {
-    private final Handler mHandler = new Handler();
-    private Runnable mTimer1;
-    private Runnable mTimer2;
-    private LineGraphSeries<DataPoint> mSeries1;
-    private LineGraphSeries<DataPoint> mSeries2;
-    private double graph2LastXValue = 5d;
+
+    int yearint=2017;
+    String yearinc="2017";
+String year="2017";
+
+
+    Integer y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_graph_fragments, container, false);
 
-        GraphView graph = (GraphView) rootView.findViewById(R.id.graph);
-        mSeries1 = new LineGraphSeries<>(generateData());
-        graph.addSeries(mSeries1);
-
-        GraphView graph2 = (GraphView) rootView.findViewById(R.id.graph);
-        mSeries2 = new LineGraphSeries<>();
-        graph2.addSeries(mSeries2);
-        graph2.getViewport().setXAxisBoundsManual(true);
-        graph2.getViewport().setMinX(0);
-        graph2.getViewport().setMaxX(40);
 
         return rootView;
     }
 
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mTimer1 = new Runnable() {
-            @Override
-            public void run() {
-                mSeries1.resetData(generateData());
-                mHandler.postDelayed(this, 300);
-            }
-        };
-        mHandler.postDelayed(mTimer1, 300);
 
-        mTimer2 = new Runnable() {
-            @Override
-            public void run() {
-                graph2LastXValue += 1d;
-                mSeries2.appendData(new DataPoint(graph2LastXValue, getRandom()), true, 40);
-                mHandler.postDelayed(this, 200);
-            }
-        };
-        mHandler.postDelayed(mTimer2, 1000);
-    }
+
+
+    TextView v;
+    GraphView graph;
 
     @Override
-    public void onPause() {
-        mHandler.removeCallbacks(mTimer1);
-        mHandler.removeCallbacks(mTimer2);
-        super.onPause();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        graph = (GraphView) view.findViewById(R.id.graph);
+        //Button minus = (Button) view.findViewById(R.id.kurang);
+        //Button plus = (Button) view.findViewById(R.id.tambah);
+        v = (TextView) view.findViewById(R.id.graphicstext);
+
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
+        graph.getViewport().setDrawBorder(true);
+        //
+
+refresh();
+
+
+
     }
 
-    private DataPoint[] generateData() {
-        int count = 30;
-        DataPoint[] values = new DataPoint[count];
-        for (int i=0; i<count; i++) {
-            double x = i;
-            double f = mRand.nextDouble()*0.15+0.3;
-            double y = Math.sin(i*f+2) + mRand.nextDouble()*0.3;
-            DataPoint v = new DataPoint(x, y);
-            values[i] = v;
-        }
-        return values;
+
+    void refresh()
+    {
+        DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+
+        y1= dbHelper.sumByMonth("01",yearinc);
+        y2= dbHelper.sumByMonth("02",yearinc);
+        y3= dbHelper.sumByMonth("03",yearinc);
+        y4= dbHelper.sumByMonth("04",yearinc);
+        y5= dbHelper.sumByMonth("05",yearinc);
+        y6= dbHelper.sumByMonth("06",yearinc);
+        y7= dbHelper.sumByMonth("07",yearinc);
+        y8= dbHelper.sumByMonth("08",yearinc);
+        y9= dbHelper.sumByMonth("09",yearinc);
+        y10= dbHelper.sumByMonth("10",yearinc);
+        y11= dbHelper.sumByMonth("11",yearinc);
+        y12= dbHelper.sumByMonth("12",yearinc);
+
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(new DataPoint[]{new DataPoint(1, y1),
+
+        });
+        series2.resetData(new DataPoint[]{new DataPoint(1, y1),
+                new DataPoint(2, y2),
+                new DataPoint(3, y3),
+                new DataPoint(4, y4),
+                new DataPoint(5, y5),
+                new DataPoint(6, y6),
+                new DataPoint(7, y7),
+                new DataPoint(8, y8),
+                new DataPoint(9, y9),
+                new DataPoint(10, y10),
+                new DataPoint(11, y11),
+                new DataPoint(12, y12),});
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(12);
+
+        series2.setDrawAsPath(true);
+        series2.setAnimated(true);
+        graph.addSeries(series2);
     }
 
-    double mLastRandom = 2;
-    Random mRand = new Random();
-    private double getRandom() {
-        return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
+
     }
-}
+
+

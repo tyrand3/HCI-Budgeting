@@ -160,6 +160,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new HistoryFragment();
 
                 break;
+            case R.id.nav_graphs:
+                fragment = new GraphFragments();
+                break;
         }
 
         //replacing the fragment
