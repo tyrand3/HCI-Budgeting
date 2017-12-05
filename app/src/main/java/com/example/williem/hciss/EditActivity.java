@@ -113,7 +113,7 @@ String newString;
 
 
 
-
+/*
         addexpense_date.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -124,7 +124,7 @@ String newString;
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
+*/
 
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +167,10 @@ String newString;
 
                 else if(spinnertext.equals("Expense"))
                 {
-
+                    if (values>0)
+                    {
+                        values=values*-1;
+                    }
                     dbHelper.editExpense(titleexpense_expense.getText().toString(), values, 1, addexpense_notes.getText().toString(), newString);
 
                     Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_LONG).show();

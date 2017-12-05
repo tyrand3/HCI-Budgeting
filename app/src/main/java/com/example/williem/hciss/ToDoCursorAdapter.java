@@ -50,7 +50,7 @@ if (type==1)
     // Populate fields with extracted properties
     tvBody.setText(body);
     tvBody.setTextColor(Color.RED);
-    tvType.setText("Pengeluaran");
+    tvType.setText("Expense");
     tvType.setTextColor(Color.RED);
     tvPriority.setText("Rp."+String.valueOf(priority)+",-");
     tvDate.setText(date);
@@ -61,7 +61,7 @@ else {
     // Populate fields with extracted properties
     tvBody.setText(body);
     tvBody.setTextColor(Color.GREEN);
-    tvType.setText("Pemasukan");
+    tvType.setText("Income");
     tvType.setTextColor(Color.GREEN);
     tvPriority.setText("Rp."+String.valueOf(priority)+",-");
     tvDate.setText(date);

@@ -118,9 +118,9 @@ public class HistoryFragment extends Fragment {
 
         int jumlah=dbcenter.sumAll();
         String numberAsStrings = Integer.toString(jumlah);
-        sumtv.setText("All Transaction: Rp."+numberAsStrings+", -");
+        sumtv.setText("Total Transaction : Rp."+numberAsStrings+",-");
 
-        //   balance.setText(jumlah);
+           //balance.setText(jumlah);
 
 
     }

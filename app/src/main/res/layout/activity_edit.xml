@@ -97,8 +97,7 @@
 
             android:id="@+id/expense_edit_date"
             android:clickable="true"
-            android:focusable="false"
-            android:editable="false"
+
             />
 
 

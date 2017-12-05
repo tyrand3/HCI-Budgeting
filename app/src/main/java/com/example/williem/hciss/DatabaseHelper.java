@@ -132,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(
                 "SELECT * FROM expense", null);
         if(cursor.moveToFirst()) {
-            return cursor.getInt(0);
+            return cursor.getInt(2);
         }
         else return 0;
     }
